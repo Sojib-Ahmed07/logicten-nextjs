@@ -388,7 +388,18 @@ export default function ReviewsSection() {
                   <div className="flex justify-center py-2">
                     <Turnstile
                       siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                      onSuccess={(token) => setCaptchaToken(token)}
+                      onSuccess={(token) => {
+                        setCaptchaToken(token);
+                        setErrorMessage('');
+                      }}
+                      onError={() => {
+                        setCaptchaToken('');
+                        setErrorMessage('Captcha verification failed. Please try again.');
+                      }}
+                      onExpire={() => {
+                        setCaptchaToken('');
+                        setErrorMessage('Captcha token expired. Please verify again.');
+                      }}
                     />
                   </div>
 
