@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ElectricalBackground from "../components/ElectricalBackground";
 import Navbar from "../components/Navbar";
 import ServicesSection from "../components/ServiceSection";
 import AboutSection from "../components/AboutSection";
@@ -37,23 +36,11 @@ export default function Home() {
           color: isDark ? "#f1f5f9" : "#0f172a"
         }}
       >
-        {/* Background Animated Circuits */}
-        <ElectricalBackground isDark={isDark} />
-
-        {/* Non-sticky Header */}
+        {/* Navigation */}
         <Navbar isDark={isDark} setIsDark={setIsDark} />
 
         {/* HERO SECTION */}
-        <section
-          style={{
-            position: "relative",
-            zIndex: 10,
-            paddingTop: "2rem",
-            paddingBottom: "4rem",
-            paddingLeft: "1rem",
-            paddingRight: "1rem"
-          }}
-        >
+        <section className="hero-section">
           <div
             className="hero-wrapper"
             style={{
@@ -119,7 +106,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Page Sections (passing isDark prop so subcomponents can adjust colors if needed) */}
+        {/* Page Sections */}
         <ServicesSection isDark={isDark} />
         <AboutSection isDark={isDark} />
         <ReviewsSection isDark={isDark} />
@@ -129,23 +116,43 @@ export default function Home() {
 
       {/* Global & Responsive Styles */}
       <style jsx global>{`
-        /* Dynamic Selection Styling */
+        :root {
+          --navbar-height-mobile: 4.5rem;
+        }
+
         ::selection {
-          background-color: ${isDark ? "#facc15" : "#facc15"};
+          background-color: #facc15;
           color: #020617;
         }
 
+        /* Mobile Defaults (More clearance between fixed navbar and mobile banner) */
+        .hero-section {
+          position: relative;
+          z-index: 10;
+          padding-top: calc(var(--navbar-height-mobile) + 0.15rem);
+          padding-bottom: 2rem;
+          padding-left: 0.75rem;
+          padding-right: 0.75rem;
+        }
+
         .hero-wrapper {
-          min-height: 480px;
-          padding: 1.5rem;
+          min-height: 360px;
+          padding: 1rem;
         }
 
         .quote-btn {
-          padding: 0.75rem 1.5rem;
+          padding: 0.75rem 1.25rem;
           font-size: 0.875rem;
         }
 
+        /* Desktop Adjustments */
         @media (min-width: 640px) {
+          .hero-section {
+            padding-top: 6.5rem;
+            padding-bottom: 4rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
           .hero-wrapper {
             min-height: 600px;
             padding: 2.5rem;
