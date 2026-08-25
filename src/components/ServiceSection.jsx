@@ -1,76 +1,351 @@
+"use client";
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Home, Building2, Factory, Sun, BatteryCharging, Zap } from 'lucide-react';
+import { 
+  Home, 
+  Building2, 
+  Factory, 
+  Sun, 
+  BatteryCharging, 
+  Zap, 
+  Camera, 
+  ShieldAlert, 
+  Network 
+} from 'lucide-react';
 
 const services = [
-  { icon: Home, title: 'Residential Electrical', desc: 'Rewiring, safety switches, powerboards, and custom architectural lighting.' },
-  { icon: Building2, title: 'Commercial Electrical', desc: 'Fit-outs, three-phase power, testing & tagging, and safety compliance.' },
-  { icon: Factory, title: 'Industrial Electrical', desc: 'Heavy machinery integration, motor controls, fault detection, and maintenance.' },
-  { icon: Sun, title: 'Solar Installations', desc: 'Custom energy design and rooftop panel installations for lower power bills.' },
-  { icon: BatteryCharging, title: 'Solar & Battery Storage', desc: 'Battery backup units to store clean power for night-time grid independence.' },
-  { icon: Zap, title: 'EV Charger Setup', desc: 'Certified high-speed EV charging stations for residential and commercial hubs.' }
+  { 
+    icon: Home, 
+    title: 'Residential new installation', 
+    desc: 'Complete home electrical design, wiring, safety switches, and custom architectural lighting.' 
+  },
+  { 
+    icon: Building2, 
+    title: 'Commercial new installation', 
+    desc: 'Full electrical fit-outs, three-phase power setup, testing & tagging, and compliance.' 
+  },
+  { 
+    icon: Factory, 
+    title: 'Industrial Electrical', 
+    desc: 'Heavy machinery integration, motor controls, fault detection, and maintenance.' 
+  },
+  { 
+    icon: Sun, 
+    title: 'Solar Installations', 
+    desc: 'Custom energy design and rooftop panel installations for lower power bills.' 
+  },
+  { 
+    icon: BatteryCharging, 
+    title: 'Solar & Battery Storage', 
+    desc: 'Battery backup units to store clean power for night-time grid independence.' 
+  },
+  { 
+    icon: Zap, 
+    title: 'EV Charger Setup', 
+    desc: 'Certified high-speed EV charging stations for residential and commercial hubs.' 
+  },
+  { 
+    icon: Camera, 
+    title: 'CCTV Systems', 
+    desc: 'High-definition security camera surveillance setups with remote mobile access.' 
+  },
+  { 
+    icon: ShieldAlert, 
+    title: 'Alarm Systems', 
+    desc: 'Smart intruder alarm installations and motion detection to protect your property.' 
+  },
+  { 
+    icon: Network, 
+    title: 'Telecommunication & Data Cabling', 
+    desc: 'Structured Cat6/fiber network cabling, patch panels, and high-speed data points.' 
+  }
 ];
 
-export default function ServicesSection() {
+export default function ServicesSection({ isDark }) {
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   return (
-    <section id="services" className="relative z-10 pt-8 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <motion.span 
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-block px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-400/10 text-yellow-600 dark:text-amber-300 font-extrabold text-xs tracking-widest uppercase shadow-sm dark:shadow-[0_0_12px_rgba(250,204,21,0.2)]"
+    <>
+      <section 
+        id="services" 
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          paddingTop: '2rem',
+          paddingBottom: '4rem',
+          paddingLeft: '1rem',
+          paddingRight: '1rem'
+        }}
+        className="services-section"
+      >
+        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+          
+          {/* Section Title */}
+          <div 
+            style={{
+              textAlign: 'center',
+              maxWidth: '48rem',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}
+            className="title-wrapper"
           >
-            Powering Sydney
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mt-3 tracking-tight"
-          >
-            High-Voltage & Low-Voltage Expertise
-          </motion.h2>
-        </div>
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              style={{
+                display: 'inline-block',
+                paddingLeft: '1rem',
+                paddingRight: '1rem',
+                paddingTop: '0.375rem',
+                paddingBottom: '0.375rem',
+                borderRadius: '9999px',
+                border: '1px solid rgba(250, 204, 21, 0.3)',
+                backgroundColor: 'rgba(250, 204, 21, 0.1)',
+                color: isDark ? '#facc15' : '#fbbf24',
+                fontWeight: 800,
+                fontSize: '0.75rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                boxShadow: isDark ? '0 0 12px rgba(250, 204, 21, 0.2)' : '0 1px 2px rgba(0,0,0,0.05)'
+              }}
+            >
+              Powering Sydney
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              style={{
+                fontWeight: 900,
+                color: isDark ? '#ffffff' : '#0f172a',
+                letterSpacing: '-0.025em'
+              }}
+              className="section-heading"
+            >
+              High-Voltage & Low-Voltage Expertise
+            </motion.h2>
+          </div>
 
-        {/* Animated Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {services.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="group relative p-8 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 hover:border-yellow-400/50 transition-all duration-300 shadow-md dark:shadow-xl hover:shadow-[0_0_25px_rgba(250,204,21,0.15)] overflow-hidden"
-              >
-                {/* Warm Warm-Bulb Filament Radial Backlight */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full blur-2xl group-hover:bg-yellow-400/15 transition-all duration-300" />
-                
-                {/* Icon Container with Warm Yellow Accents */}
-                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center text-amber-500 dark:text-yellow-400 group-hover:bg-yellow-400 group-hover:text-slate-950 group-hover:shadow-[0_0_20px_rgba(250,204,21,0.6)] transition-all duration-300 mb-6">
-                  <Icon className="w-7 h-7" />
-                </div>
-                
-                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3 group-hover:text-amber-500 dark:group-hover:text-yellow-400 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                  {item.desc}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
+          {/* Animated Cards Grid */}
+          <div className="services-grid">
+            {services.map((item, index) => {
+              const Icon = item.icon;
+              const isHovered = hoveredCard === index;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="service-card"
+                  style={{
+                    position: 'relative',
+                    borderRadius: '1.5rem',
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff',
+                    border: isHovered
+                      ? '1px solid rgba(250, 204, 21, 0.5)'
+                      : (isDark ? '1px solid rgba(30, 41, 59, 0.8)' : '1px solid #e2e8f0'),
+                    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: isHovered
+                      ? '0 0 25px rgba(250, 204, 21, 0.15)'
+                      : (isDark ? '0 20px 25px -5px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'),
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'flex-start'
+                  }}
+                >
+                  {/* Warm Filament Radial Backlight */}
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      borderRadius: '9999px',
+                      filter: 'blur(32px)',
+                      backgroundColor: isHovered ? 'rgba(250, 204, 21, 0.15)' : 'rgba(250, 204, 21, 0.05)',
+                      transition: 'all 300ms ease',
+                      pointerEvents: 'none'
+                    }}
+                    className="card-backlight"
+                  />
+                  
+                  {/* Icon Container */}
+                  <div 
+                    className="icon-container"
+                    style={{
+                      flexShrink: 0,
+                      borderRadius: '1rem',
+                      backgroundColor: isHovered 
+                        ? '#facc15' 
+                        : (isDark ? 'rgba(30, 41, 59, 0.9)' : '#f1f5f9'),
+                      border: isHovered 
+                        ? '1px solid #facc15' 
+                        : (isDark ? '1px solid rgba(51, 65, 85, 0.6)' : '1px solid #e2e8f0'),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: isHovered 
+                        ? '#020617' 
+                        : (isDark ? '#facc15' : '#fbbf24'),
+                      boxShadow: isHovered ? '0 0 20px rgba(250, 204, 21, 0.6)' : 'none',
+                      transition: 'all 300ms ease'
+                    }}
+                  >
+                    <Icon className="service-icon" />
+                  </div>
+                  
+                  {/* Text Content */}
+                  <div style={{ flex: 1 }}>
+                    <h3 
+                      className="card-title"
+                      style={{
+                        fontWeight: 900,
+                        color: isHovered 
+                          ? (isDark ? '#facc15' : '#fbbf24') 
+                          : (isDark ? '#ffffff' : '#0f172a'),
+                        transition: 'color 200ms ease'
+                      }}
+                    >
+                      {item.title}
+                    </h3>
+                    <p 
+                      className="card-desc"
+                      style={{
+                        color: isDark ? '#94a3b8' : '#475569'
+                      }}
+                    >
+                      {item.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* Responsive Layout Styles */}
+      <style jsx global>{`
+        .title-wrapper {
+          margin-bottom: 2rem;
+        }
+
+        .section-heading {
+          font-size: 1.5rem;
+          margin-top: 0.5rem;
+        }
+
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(1, minmax(0, 1fr));
+          gap: 0.75rem;
+        }
+
+        .service-card {
+          padding: 1rem;
+          flex-direction: row;
+          gap: 1rem;
+        }
+
+        .card-backlight {
+          width: 6rem;
+          height: 6rem;
+        }
+
+        .icon-container {
+          width: 2.75rem;
+          height: 2.75rem;
+        }
+
+        .service-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        .card-title {
+          font-size: 1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .card-desc {
+          font-size: 0.75rem;
+          line-height: 1.25;
+        }
+
+        @media (min-width: 640px) {
+          .services-section {
+            padding-bottom: 5rem !important;
+          }
+
+          .title-wrapper {
+            margin-bottom: 3.5rem;
+          }
+
+          .section-heading {
+            font-size: 3rem;
+            margin-top: 0.75rem;
+          }
+
+          .services-grid {
+            gap: 2rem;
+          }
+
+          .service-card {
+            padding: 2rem;
+            border-radius: 1.5rem;
+            flex-direction: column;
+            gap: 0;
+          }
+
+          .card-backlight {
+            width: 8rem;
+            height: 8rem;
+          }
+
+          .icon-container {
+            width: 3.5rem;
+            height: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+          }
+
+          .service-icon {
+            width: 1.75rem;
+            height: 1.75rem;
+          }
+
+          .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+          }
+
+          .card-desc {
+            font-size: 0.875rem;
+            line-height: 1.625;
+          }
+        }
+
+        @media (min-width: 768px) {
+          .services-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .services-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+      `}</style>
+    </>
   );
 }

@@ -7,12 +7,15 @@ import { Phone, Menu, X, ShieldCheck, Zap, Sun, Moon } from 'lucide-react';
 const navItems = [
   { name: 'Services', href: '#services' },
   { name: 'About Us', href: '#about' },
+  { name: 'Reviews', href: '#reviews' },
   { name: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar({ isDark: externalIsDark, setIsDark: externalSetIsDark }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('');
+  const [hoveredTab, setHoveredTab] = useState(null);
+  const [hoveredMobileItem, setHoveredMobileItem] = useState(null);
 
   // Internal state fallback if props aren't passed from parent
   const [internalIsDark, setInternalIsDark] = useState(true);
@@ -55,58 +58,96 @@ export default function Navbar({ isDark: externalIsDark, setIsDark: externalSetI
 
   return (
     <>
-      <header className="relative w-full z-40 pt-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between h-22 px-6 sm:px-8 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-amber-500/20 shadow-md dark:shadow-[0_0_30px_rgba(245,158,11,0.1)] backdrop-blur-2xl transition-colors duration-300">
+      <header style={{ position: 'relative', width: '100%', zIndex: 40, paddingTop: '1.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
+        <div 
+          style={{
+            maxWidth: '80rem',
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '5.5rem',
+            paddingLeft: '1.5rem',
+            paddingRight: '1.5rem',
+            borderRadius: '1.5rem',
+            backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+            border: isDarkMode ? '1px solid rgba(250, 204, 21, 0.2)' : '1px solid #e2e8f0',
+            boxShadow: isDarkMode ? '0 0 30px rgba(250, 204, 21, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            backdropFilter: 'blur(40px)',
+            transition: 'background-color 300ms, border-color 300ms, box-shadow 300ms'
+          }}
+        >
 
           {/* Brand Identity */}
           <motion.a 
             href="#"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-3.5 group"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', textDecoration: 'none', color: 'inherit' }}
           >
             {/* Logo Wrapper */}
-            <div className="relative flex items-center justify-center w-11 h-11 rounded-full overflow-hidden shrink-0">
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyCenter: 'center', width: '2.75rem', height: '2.75rem', borderRadius: '9999px', overflow: 'hidden', flexShrink: 0 }}>
               <img 
                 src="/logo.png" 
                 alt="Logic Ten Electrical Logo" 
-                className="w-full h-full object-cover"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
-              <span className="absolute top-0 right-0 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              <span style={{ position: 'absolute', top: 0, right: 0, display: 'flex', height: '0.75rem', width: '0.75rem' }}>
+                <span className="ping-animation" style={{ position: 'absolute', display: 'inline-flex', height: '100%', width: '100%', borderRadius: '9999px', backgroundColor: '#facc15', opacity: 0.75 }}></span>
+                <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '9999px', height: '0.75rem', width: '0.75rem', backgroundColor: '#eab308' }}></span>
               </span>
             </div>
             <div>
-  <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white block leading-none transition-colors">
-    <span className="text-green-700 dark:text-green-400 drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(34,197,94,0.4)]">Logic Ten</span> <span className="text-amber-500 dark:text-amber-400">Electrical</span>
-  </span>
-  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-1 transition-colors">
-    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> Lic 497422C
-  </span>
-</div>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.025em', color: isDarkMode ? '#ffffff' : '#0f172a', display: 'block', lineHeight: 1, transition: 'color 300ms' }}>
+                <span style={{ color: isDarkMode ? '#4ade80' : '#15803d', filter: isDarkMode ? 'drop-shadow(0 0 10px rgba(34,197,94,0.4))' : 'drop-shadow(0 1px 1px rgba(0,0,0,0.05))' }}>Logic Ten</span>{' '}
+                <span style={{ color: isDarkMode ? '#fbbf24' : '#f59e0b' }}>Electrical</span>
+              </span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isDarkMode ? '#94a3b8' : '#64748b', display: 'flex', alignItems: 'center', gap: '0.375rem', marginTop: '0.25rem', transition: 'color 300ms' }}>
+                <ShieldCheck style={{ width: '0.875rem', height: '0.875rem', color: isDarkMode ? '#34d399' : '#10b981' }} /> Lic 497422C
+              </span>
+            </div>
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-bold text-slate-600 dark:text-slate-300">
+          <div className="desktop-nav" style={{ alignItems: 'center', gap: '1.5rem', fontSize: '0.875rem', fontWeight: 700, color: isDarkMode ? '#cbd5e1' : '#475569' }}>
             {navItems.map((item) => {
               const isActive = activeTab === item.href;
+              const isHovered = hoveredTab === item.name;
               return (
                 <motion.a
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleScroll(e, item.href)}
+                  onMouseEnter={() => setHoveredTab(item.name)}
+                  onMouseLeave={() => setHoveredTab(null)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative py-1 transition-colors duration-200 ${
-                    isActive ? 'text-amber-500 dark:text-amber-400 font-black' : 'hover:text-amber-500 dark:hover:text-amber-400'
-                  }`}
+                  style={{
+                    position: 'relative',
+                    paddingTop: '0.25rem',
+                    paddingBottom: '0.25rem',
+                    textDecoration: 'none',
+                    transition: 'color 200ms',
+                    fontWeight: isActive ? 900 : 700,
+                    color: isActive 
+                      ? (isDarkMode ? '#facc15' : '#eab308') 
+                      : (isHovered ? (isDarkMode ? '#facc15' : '#eab308') : (isDarkMode ? '#cbd5e1' : '#475569'))
+                  }}
                 >
                   {item.name}
                   {isActive && (
                     <motion.div
                       layoutId="activeGlow"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500 dark:bg-amber-400 rounded-full shadow-sm dark:shadow-[0_0_8px_#f59e0b]"
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '0.125rem',
+                        backgroundColor: isDarkMode ? '#facc15' : '#eab308',
+                        borderRadius: '9999px',
+                        boxShadow: isDarkMode ? '0 0 8px #facc15' : '0 1px 2px rgba(0,0,0,0.1)'
+                      }}
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -121,31 +162,62 @@ export default function Navbar({ isDark: externalIsDark, setIsDark: externalSetI
               whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-amber-500 dark:text-amber-400 shadow-inner cursor-pointer transition-colors"
+              style={{
+                padding: '0.625rem',
+                borderRadius: '1rem',
+                backgroundColor: isDarkMode ? '#1e293b' : '#f1f5f9',
+                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                color: isDarkMode ? '#facc15' : '#eab308',
+                cursor: 'pointer',
+                transition: 'background-color 200ms, border-color 200ms',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? <Sun style={{ width: '1.25rem', height: '1.25rem' }} /> : <Moon style={{ width: '1.25rem', height: '1.25rem' }} />}
             </motion.button>
           </div>
 
           {/* Mobile Controls */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="mobile-controls" style={{ alignItems: 'center', gap: '0.5rem' }}>
             <motion.button
               type="button"
               whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-amber-500/30 text-amber-500 dark:text-amber-400 transition-colors"
+              style={{
+                padding: '0.625rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDarkMode ? '#1e293b' : '#f1f5f9',
+                border: isDarkMode ? '1px solid rgba(250, 204, 21, 0.3)' : '1px solid #e2e8f0',
+                color: isDarkMode ? '#facc15' : '#eab308',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? <Sun style={{ width: '1.25rem', height: '1.25rem' }} /> : <Moon style={{ width: '1.25rem', height: '1.25rem' }} />}
             </motion.button>
 
             <motion.button
               type="button"
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-amber-500/30 text-amber-500 dark:text-amber-400 transition-colors"
+              style={{
+                padding: '0.625rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDarkMode ? '#1e293b' : '#f1f5f9',
+                border: isDarkMode ? '1px solid rgba(250, 204, 21, 0.3)' : '1px solid #e2e8f0',
+                color: isDarkMode ? '#facc15' : '#eab308',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X style={{ width: '1.5rem', height: '1.5rem' }} /> : <Menu style={{ width: '1.5rem', height: '1.5rem' }} />}
             </motion.button>
           </div>
         </div>
@@ -158,23 +230,56 @@ export default function Navbar({ isDark: externalIsDark, setIsDark: externalSetI
               animate={{ opacity: 1, height: 'auto', scale: 1 }}
               exit={{ opacity: 0, height: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="md:hidden mt-3 max-w-7xl mx-auto overflow-hidden rounded-3xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-amber-500/20 p-6 backdrop-blur-2xl shadow-xl dark:shadow-2xl flex flex-col gap-4 text-slate-800 dark:text-slate-200 font-bold transition-colors"
+              className="mobile-drawer"
+              style={{
+                marginTop: '0.75rem',
+                maxWidth: '80rem',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                overflow: 'hidden',
+                borderRadius: '1.5rem',
+                backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                border: isDarkMode ? '1px solid rgba(250, 204, 21, 0.2)' : '1px solid #e2e8f0',
+                padding: '1.5rem',
+                backdropFilter: 'blur(40px)',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                color: isDarkMode ? '#e2e8f0' : '#1e293b',
+                fontWeight: 700
+              }}
             >
-              {navItems.map((item, idx) => (
-                <motion.a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => handleScroll(e, item.href)}
-                  initial={{ opacity: 0, x: -15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="py-2 px-3 rounded-xl hover:bg-amber-500/10 hover:text-amber-500 dark:hover:text-amber-400 transition-all flex items-center justify-between"
-                >
-                  <span>{item.name}</span>
-                  <Zap className="w-4 h-4 opacity-0 hover:opacity-100 text-amber-500 dark:text-amber-400" />
-                </motion.a>
-              ))}
+              {navItems.map((item, idx) => {
+                const isHovered = hoveredMobileItem === item.name;
+                return (
+                  <motion.a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => handleScroll(e, item.href)}
+                    onMouseEnter={() => setHoveredMobileItem(item.name)}
+                    onMouseLeave={() => setHoveredMobileItem(null)}
+                    initial={{ opacity: 0, x: -15 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    whileTap={{ scale: 0.97 }}
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '0.75rem',
+                      backgroundColor: isHovered ? 'rgba(250, 204, 21, 0.1)' : 'transparent',
+                      color: isHovered ? (isDarkMode ? '#facc15' : '#eab308') : 'inherit',
+                      textDecoration: 'none',
+                      transition: 'all 200ms',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span>{item.name}</span>
+                    <Zap style={{ width: '1rem', height: '1rem', opacity: isHovered ? 1 : 0, color: isDarkMode ? '#facc15' : '#eab308', transition: 'opacity 200ms' }} />
+                  </motion.a>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
@@ -187,18 +292,82 @@ export default function Navbar({ isDark: externalIsDark, setIsDark: externalSetI
         animate={{ scale: 1, opacity: 1 }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black px-5 py-3.5 rounded-full shadow-[0_10px_25px_rgba(245,158,11,0.5)] border border-amber-300/40 backdrop-blur-md cursor-pointer"
+        className="call-now-btn"
+        style={{
+          position: 'fixed',
+          bottom: '1.5rem',
+          right: '1.5rem',
+          zIndex: 50,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.625rem',
+          background: 'linear-gradient(to right, #facc15, #eab308, #f59e0b)',
+          color: '#020617',
+          fontWeight: 900,
+          paddingLeft: '1.25rem',
+          paddingRight: '1.25rem',
+          paddingTop: '0.875rem',
+          paddingBottom: '0.875rem',
+          borderRadius: '9999px',
+          boxShadow: '0 10px 25px rgba(250, 204, 21, 0.5)',
+          border: '1px solid rgba(253, 224, 71, 0.4)',
+          backdropFilter: 'blur(12px)',
+          cursor: 'pointer',
+          textDecoration: 'none',
+          transition: 'all 200ms'
+        }}
         aria-label="Call Logic Ten Electrical"
       >
-        <div className="relative flex items-center justify-center">
-          <Phone className="w-5 h-5 fill-slate-950" />
-          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-950"></span>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Phone style={{ width: '1.25rem', height: '1.25rem', fill: '#020617' }} />
+          <span style={{ position: 'absolute', top: '-0.25rem', right: '-0.25rem', display: 'flex', height: '0.625rem', width: '0.625rem' }}>
+            <span className="ping-animation" style={{ position: 'absolute', display: 'inline-flex', height: '100%', width: '100%', borderRadius: '9999px', backgroundColor: '#020617', opacity: 0.75 }}></span>
+            <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '9999px', height: '0.625rem', width: '0.625rem', backgroundColor: '#020617' }}></span>
           </span>
         </div>
-        <span className="hidden sm:inline text-sm font-extrabold tracking-wide uppercase">Call Now</span>
+        <span className="call-now-text" style={{ fontSize: '0.875rem', fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Call Now</span>
       </motion.a>
+
+      {/* Media Query & Keyframe Standard CSS */}
+      <style jsx global>{`
+        @keyframes custom-ping {
+          75%, 100% {
+            transform: scale(2);
+            opacity: 0;
+          }
+        }
+        .ping-animation {
+          animation: custom-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        .desktop-nav {
+          display: none;
+        }
+        .mobile-controls {
+          display: flex;
+        }
+        .call-now-text {
+          display: none;
+        }
+
+        @media (min-width: 640px) {
+          .call-now-text {
+            display: inline;
+          }
+        }
+
+        @media (min-width: 768px) {
+          .desktop-nav {
+            display: flex;
+          }
+          .mobile-controls {
+            display: none;
+          }
+          .mobile-drawer {
+            display: none !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

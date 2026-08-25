@@ -1,74 +1,161 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import ElectricalBackground from '../components/ElectricalBackground';
-import Navbar from '../components/Navbar';
-import ServicesSection from '../components/ServiceSection';
-import AboutSection from '../components/AboutSection';
-import ContactSection from '../components/ContactSection';
-import Footer from '../components/Footer';
-import ReviewsSection from '@/components/ReviewsSection';
+import { useState, useEffect } from "react";
+import ElectricalBackground from "../components/ElectricalBackground";
+import Navbar from "../components/Navbar";
+import ServicesSection from "../components/ServiceSection";
+import AboutSection from "../components/AboutSection";
+import ContactSection from "../components/ContactSection";
+import Footer from "../components/Footer";
+import ReviewsSection from "../components/ReviewsSection";
 
-export default function App() {
-  const [isDark, setIsDark] = useState(true);
+export default function Home() {
+  // Set initial state to false (Light Mode default)
+  const [isDark, setIsDark] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) {
-      root.classList.add('dark');
+      root.classList.add("dark");
     } else {
-      root.classList.remove('dark');
+      root.classList.remove("dark");
     }
   }, [isDark]);
 
   return (
-    <div className={`relative min-h-screen font-sans antialiased overflow-hidden transition-colors duration-300 ${
-      isDark 
-        ? 'bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950' 
-        : 'bg-slate-50 text-slate-900 selection:bg-amber-400 selection:text-slate-950'
-    }`}>
-      
-      {/* Background Animated Circuits */}
-      <ElectricalBackground isDark={isDark} />
+    <>
+      <div
+        className="home-container"
+        style={{
+          position: "relative",
+          minHeight: "100vh",
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          overflow: "hidden",
+          transition: "background-color 300ms, color 300ms",
+          backgroundColor: isDark ? "#020617" : "#ffffff",
+          color: isDark ? "#f1f5f9" : "#0f172a"
+        }}
+      >
+        {/* Background Animated Circuits */}
+        <ElectricalBackground isDark={isDark} />
 
-      {/* Non-sticky Header */}
-      <Navbar isDark={isDark} setIsDark={setIsDark} />
+        {/* Non-sticky Header */}
+        <Navbar isDark={isDark} setIsDark={setIsDark} />
 
-      {/* HERO SECTION */}
-      <section className="relative z-10 pt-8 pb-16 px-4 sm:px-6 lg:px-8">
-        {/* Changed container layout to flex items-end justify-end */}
-        <div className="max-w-7xl mx-auto min-h-[480px] sm:min-h-[600px] rounded-3xl overflow-hidden relative flex items-end justify-end p-6 sm:p-10 border-0 outline-none">
-          
-          {/* Responsive Background Hero Image */}
-          <picture className="absolute inset-0 w-full h-full overflow-hidden">
-            {/* Display PC banner on screens 640px and larger */}
-            <source media="(min-width: 640px)" srcSet="/hero-banner-pc.png" />
-            {/* Default/Mobile banner for screens smaller than 640px */}
-            <img 
-              src="/hero-banner-mobile.png" 
-              alt="Logic Ten Electrical Hero Banner" 
-              className="w-full h-full object-cover object-center scale-[1.03]"
-            />
-          </picture>
+        {/* HERO SECTION */}
+        <section
+          style={{
+            position: "relative",
+            zIndex: 10,
+            paddingTop: "2rem",
+            paddingBottom: "4rem",
+            paddingLeft: "1rem",
+            paddingRight: "1rem"
+          }}
+        >
+          <div
+            className="hero-wrapper"
+            style={{
+              maxWidth: "80rem",
+              margin: "0 auto",
+              overflow: "hidden",
+              position: "relative",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+              borderRadius: "1.5rem",
+              border: "none",
+              outline: "none"
+            }}
+          >
+            {/* Responsive Background Hero Image */}
+            <picture style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden" }}>
+              {/* Display PC banner on screens 640px and larger */}
+              <source media="(min-width: 640px)" srcSet="/hero-banner-pc.png" />
+              {/* Default/Mobile banner for screens smaller than 640px */}
+              <img
+                src="/hero-banner-mobile.png"
+                alt="Logic Ten Electrical Hero Banner"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  transform: "scale(1)"
+                }}
+              />
+            </picture>
 
-          {/* Bottom-Right Single Action Button Overlay */}
-          <div className="relative z-10">
-            <a 
-              href="#contact"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base rounded-2xl shadow-2xl hover:scale-105 transition-all cursor-pointer"
-            >
-              Get a Free Quote
-            </a>
+            {/* Bottom-Right Single Action Button Overlay */}
+            <div style={{ position: "relative", zIndex: 10 }}>
+              <a
+                href="#contact"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="quote-btn"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: isHovered
+                    ? "linear-gradient(to right, #fde047, #facc15)"
+                    : "linear-gradient(to right, #facc15, #eab308, #f59e0b)",
+                  color: "#020617",
+                  fontWeight: 900,
+                  borderRadius: "1rem",
+                  boxShadow: isHovered
+                    ? "0 20px 25px -5px rgba(250, 204, 21, 0.4), 0 8px 10px -6px rgba(250, 204, 21, 0.4)"
+                    : "0 20px 25px -5px rgba(250, 204, 21, 0.25), 0 8px 10px -6px rgba(250, 204, 21, 0.25)",
+                  transform: isHovered ? "scale(1.05)" : "scale(1)",
+                  transition: "all 200ms ease",
+                  cursor: "pointer",
+                  textDecoration: "none"
+                }}
+              >
+                Get a Free Quote
+              </a>
+            </div>
           </div>
+        </section>
 
-        </div>
-      </section>
+        {/* Page Sections (passing isDark prop so subcomponents can adjust colors if needed) */}
+        <ServicesSection isDark={isDark} />
+        <AboutSection isDark={isDark} />
+        <ReviewsSection isDark={isDark} />
+        <ContactSection isDark={isDark} />
+        <Footer isDark={isDark} />
+      </div>
 
-      <ServicesSection />
-      <AboutSection />
-      <ReviewsSection/>
-      <ContactSection />
-      <Footer />
-    </div>
+      {/* Global & Responsive Styles */}
+      <style jsx global>{`
+        /* Dynamic Selection Styling */
+        ::selection {
+          background-color: ${isDark ? "#facc15" : "#facc15"};
+          color: #020617;
+        }
+
+        .hero-wrapper {
+          min-height: 480px;
+          padding: 1.5rem;
+        }
+
+        .quote-btn {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.875rem;
+        }
+
+        @media (min-width: 640px) {
+          .hero-wrapper {
+            min-height: 600px;
+            padding: 2.5rem;
+          }
+          .quote-btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+          }
+        }
+      `}</style>
+    </>
   );
 }

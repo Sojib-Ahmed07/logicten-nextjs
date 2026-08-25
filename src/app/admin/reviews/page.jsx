@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+// Fallbacks prevent top-level module evaluation from throwing 'supabaseUrl is required' during build
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
 
-export default function AdminReviewsPage() {
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export default function AdminReviewsPage({ isDark }) {
   const [secretKey, setSecretKey] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -66,20 +67,43 @@ export default function AdminReviewsPage() {
     }
   };
 
+  // Dynamic style values based on isDark prop
+  const theme = {
+    bg: isDark ? '#0f172a' : '#f8fafc',
+    cardBg: isDark ? '#1e293b' : '#ffffff',
+    border: isDark ? '#334155' : '#e2e8f0',
+    textPrimary: isDark ? '#f8fafc' : '#0f172a',
+    textSecondary: isDark ? '#94a3b8' : '#64748b',
+    textBody: isDark ? '#cbd5e1' : '#334155',
+    inputBg: isDark ? '#0f172a' : '#ffffff',
+    btnSecondaryBg: isDark ? '#334155' : '#e2e8f0',
+    btnSecondaryText: isDark ? '#ffffff' : '#0f172a',
+    alertBg: isDark ? '#1e293b' : '#f0f9ff',
+    alertBorder: isDark ? '#3b82f6' : '#bae6fd',
+    alertText: isDark ? '#38bdf8' : '#0284c7',
+  };
+
   // Passcode Guard View
   if (!isAuthorized) {
     return (
-      <div style={styles.container}>
-        <div style={styles.card}>
+      <div style={{ ...styles.container, backgroundColor: theme.bg, color: theme.textPrimary }}>
+        <div style={{ ...styles.card, backgroundColor: theme.cardBg, borderColor: theme.border }}>
           <h2 style={styles.title}>🔒 Admin Access Required</h2>
-          <p style={styles.subtitle}>Enter your Admin Secret Key to view pending reviews.</p>
+          <p style={{ ...styles.subtitle, color: theme.textSecondary }}>
+            Enter your Admin Secret Key to view pending reviews.
+          </p>
           <form onSubmit={handleLogin} style={styles.form}>
             <input
               type="password"
               placeholder="Enter ADMIN_SECRET_KEY..."
               value={secretKey}
               onChange={(e) => setSecretKey(e.target.value)}
-              style={styles.input}
+              style={{
+                ...styles.input,
+                backgroundColor: theme.inputBg,
+                borderColor: theme.border,
+                color: theme.textPrimary,
+              }}
               required
             />
             <button type="submit" style={styles.loginBtn}>
@@ -92,36 +116,68 @@ export default function AdminReviewsPage() {
   }
 
   return (
-    <div style={styles.dashboardContainer}>
-      <header style={styles.header}>
+    <div style={{ ...styles.dashboardContainer, backgroundColor: theme.bg, color: theme.textPrimary }}>
+      <header style={{ ...styles.header, borderColor: theme.border }}>
         <div>
           <h1 style={styles.dashboardTitle}>Review Moderation Dashboard</h1>
-          <p style={styles.subtitle}>
+          <p style={{ ...styles.subtitle, color: theme.textSecondary }}>
             {reviews.length} pending {reviews.length === 1 ? 'review' : 'reviews'} awaiting approval
           </p>
         </div>
-        <button onClick={fetchPendingReviews} style={styles.refreshBtn}>
+        <button
+          onClick={fetchPendingReviews}
+          style={{
+            ...styles.refreshBtn,
+            backgroundColor: theme.btnSecondaryBg,
+            color: theme.btnSecondaryText,
+          }}
+        >
           🔄 Refresh
         </button>
       </header>
 
-      {message && <div style={styles.alert}>{message}</div>}
+      {message && (
+        <div
+          style={{
+            ...styles.alert,
+            backgroundColor: theme.alertBg,
+            borderColor: theme.alertBorder,
+            color: theme.alertText,
+          }}
+        >
+          {message}
+        </div>
+      )}
 
       {loading ? (
-        <p style={{ textAlign: 'center', color: '#94a3b8' }}>Loading pending reviews...</p>
+        <p style={{ textAlign: 'center', color: theme.textSecondary }}>Loading pending reviews...</p>
       ) : reviews.length === 0 ? (
-        <div style={styles.emptyState}>
+        <div
+          style={{
+            ...styles.emptyState,
+            backgroundColor: theme.cardBg,
+            borderColor: theme.border,
+            color: theme.textSecondary,
+          }}
+        >
           <h3>🎉 All caught up!</h3>
           <p>There are no pending reviews to moderate right now.</p>
         </div>
       ) : (
         <div style={styles.grid}>
           {reviews.map((rev) => (
-            <div key={rev.id} style={styles.reviewCard}>
+            <div
+              key={rev.id}
+              style={{
+                ...styles.reviewCard,
+                backgroundColor: theme.cardBg,
+                borderColor: theme.border,
+              }}
+            >
               <div style={styles.cardHeader}>
                 <div>
-                  <h3 style={styles.authorName}>{rev.name}</h3>
-                  <span style={styles.meta}>
+                  <h3 style={{ ...styles.authorName, color: theme.textPrimary }}>{rev.name}</h3>
+                  <span style={{ ...styles.meta, color: theme.textSecondary }}>
                     {rev.location ? `📍 ${rev.location}` : ''}{' '}
                     {rev.service ? `• ${rev.service}` : ''}
                   </span>
@@ -129,7 +185,7 @@ export default function AdminReviewsPage() {
                 <span style={styles.rating}>{'⭐'.repeat(rev.rating || 5)}</span>
               </div>
 
-              <p style={styles.comment}>{rev.comment}</p>
+              <p style={{ ...styles.comment, color: theme.textBody }}>{rev.comment}</p>
 
               <div style={styles.actions}>
                 <button
@@ -153,47 +209,43 @@ export default function AdminReviewsPage() {
   );
 }
 
-// Inline Styles for instant setup without CSS configs
 const styles = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#0f172a',
-    color: '#f8fafc',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: 'sans-serif',
     padding: '20px',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
   },
   dashboardContainer: {
     minHeight: '100vh',
-    backgroundColor: '#0f172a',
-    color: '#f8fafc',
     fontFamily: 'sans-serif',
     padding: '40px 20px',
     maxWidth: '1000px',
     margin: '0 auto',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
   },
   card: {
-    backgroundColor: '#1e293b',
-    border: '1px solid #334155',
+    border: '1px solid',
     borderRadius: '12px',
     padding: '32px',
     maxWidth: '400px',
     width: '100%',
     textAlign: 'center',
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
   },
   title: { fontSize: '20px', margin: '0 0 8px 0' },
   dashboardTitle: { fontSize: '28px', margin: '0 0 4px 0' },
-  subtitle: { color: '#94a3b8', fontSize: '14px', margin: 0 },
+  subtitle: { fontSize: '14px', margin: 0 },
   form: { marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px' },
   input: {
     padding: '12px',
     borderRadius: '8px',
-    border: '1px solid #334155',
-    backgroundColor: '#0f172a',
-    color: '#fff',
+    border: '1px solid',
     fontSize: '14px',
+    outline: 'none',
   },
   loginBtn: {
     padding: '12px',
@@ -209,48 +261,43 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '24px',
-    borderBottom: '1px solid #334155',
+    borderBottom: '1px solid',
     paddingBottom: '16px',
   },
   refreshBtn: {
-    backgroundColor: '#334155',
-    color: '#fff',
     border: 'none',
     padding: '8px 16px',
     borderRadius: '6px',
     cursor: 'pointer',
+    fontWeight: 'bold',
   },
   alert: {
     padding: '12px',
-    backgroundColor: '#1e293b',
-    border: '1px solid #3b82f6',
+    border: '1px solid',
     borderRadius: '8px',
     marginBottom: '20px',
-    color: '#38bdf8',
   },
   emptyState: {
     textAlign: 'center',
     padding: '40px',
-    backgroundColor: '#1e293b',
     borderRadius: '12px',
-    border: '1px solid #334155',
-    color: '#94a3b8',
+    border: '1px solid',
   },
   grid: { display: 'grid', gridTemplateColumns: '1fr', gap: '16px' },
   reviewCard: {
-    backgroundColor: '#1e293b',
-    border: '1px solid #334155',
+    border: '1px solid',
     borderRadius: '12px',
     padding: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
   },
   cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
-  authorName: { fontSize: '18px', margin: '0 0 4px 0', color: '#f8fafc' },
-  meta: { fontSize: '12px', color: '#94a3b8' },
+  authorName: { fontSize: '18px', margin: '0 0 4px 0' },
+  meta: { fontSize: '12px' },
   rating: { fontSize: '14px' },
-  comment: { color: '#cbd5e1', fontSize: '15px', lineHeight: '1.5', margin: 0 },
+  comment: { fontSize: '15px', lineHeight: '1.5', margin: 0 },
   actions: { display: 'flex', gap: '12px', marginTop: '8px' },
   actionBtn: {
     flex: 1,
